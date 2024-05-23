@@ -17,10 +17,15 @@ const getAllProducts = async () => {
     const result = await Product.deleteOne({ _id: { $eq: id } });
     return result;
   };
+  const updateProduct = async (id:string,setProduct:any) => {
+    const result = await Product.updateOne({_id:{$eq:id}}, { $set: setProduct } );
+    return result;
+  };
 
 export const ProductServices={
     createProduct,
     getAllProducts,
     getProductByID,
-    deleteProduct
+    deleteProduct,
+    updateProduct
 }
