@@ -1,11 +1,12 @@
 import express, { Request, Response } from "express"
-import { Product } from "./product.model";
 import { ProductControllers } from "./product.controller";
 
 
 const router =express.Router()
 
-router.post("/",ProductControllers.createProduct);
-router.get("/",ProductControllers.getAllProducts);
+router.post("/",ProductControllers.createProduct);//uploading a new product
+router.get("/",ProductControllers.getAllProducts);//fetching all the products
+router.get("/:productId",ProductControllers.getProductByID);//fetch a specific product
+router.delete("/:productId",ProductControllers.deleteProduct);//deleting a product
 
 export const ProductRoutes = router;
