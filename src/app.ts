@@ -8,7 +8,15 @@ app.use(express.json());
  
 // routes
 app.use("/api/products",ProductRoutes);
-app.use("/api/orders",OrderRoutes)
+app.use("/api/orders",OrderRoutes);
+
+//not found route
+app.get('*', (req: Request, res: Response) => {
+  res.status(200).json({
+    success: false,
+    message: '404 not found',
+  });
+});
 
 app.get('/', (req:Request, res:Response) => {
   res.send('Hello Next Dev!!!')
