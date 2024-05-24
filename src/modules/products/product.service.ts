@@ -10,22 +10,22 @@ const getAllProducts = async () => {
     return result;
   };
   const getProductByID = async (id:string) => {
-    const result = await Product.findById(id);
+    const result = await Product.findOne({_id:{$eq:id}});
     return result;
   };
-  const deleteProduct = async (id:string) => {
-    const result = await Product.deleteOne({ _id: { $eq: id } });
+  const deleteProduct = async (_id:string) => {
+    const result = await Product.deleteOne({ _id });
     return result;
   };
-  const updateProduct = async (id:string,setProduct:any) => {
-    const result = await Product.updateOne({_id:{$eq:id}}, { $set: setProduct } );
+  const updateProduct = async (_id:string,setProduct:object) => {
+    const result = await Product.updateOne({_id}, { $set: setProduct } );
     return result;
   };
-
+ 
 export const ProductServices={
     createProduct,
     getAllProducts,
     getProductByID,
     deleteProduct,
-    updateProduct
+    updateProduct,
 }

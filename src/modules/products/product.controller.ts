@@ -1,17 +1,31 @@
 import { Request, Response } from "express"
 import { ProductServices } from "./product.service"
+import { ProductZodSchema } from "./product.validation";
+
+
 
 //controller for creating a product
 const createProduct =async (req: Request,res:Response)=>{
 
-    const productData=req.body;
-    const result =await ProductServices.createProduct(productData);
+    try {
+  
+    const {product : productData}=req.body;
+    //data validation using zod
+    const zodParsedData= ProductZodSchema.parse(productData)
+    const result =await ProductServices.createProduct(zodParsedData);
     
     res.json({
         success:true,
         message:"Product created successfully!",
         data:result
     });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: "Could not create product!",
+      error: err,
+    });
+  }
 };
 
 //controller for getting all the products
@@ -99,5 +113,6 @@ export const ProductControllers={
     getAllProducts,
     getProductByID,
     deleteProduct,
-    updateProduct
+    updateProduct,
+    // searchProduct
 }
