@@ -18,6 +18,10 @@ code .
 
 **2. create a file named '.env' in the root of the project and paste these environment variables:**
 
+```
+
+```
+
 **3. Then go to terminal and run these commands:**
 
 ```

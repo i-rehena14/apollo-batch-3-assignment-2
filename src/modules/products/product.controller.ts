@@ -25,21 +25,32 @@ const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-//controller for getting all the products
+//controller for getting all the prodducts or searching product
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await ProductServices.getAllProducts();
+    const search = req.query.searchTerm || "";
+
+    const searchRegEx = new RegExp(".*" + search + ".*", "i");
+
+    const filter = {
+      $or: [{ name: { $regex: searchRegEx } }],
+    };
+
+    const allProducts = await ProductServices.getAllProducts(filter);
 
     res.status(200).json({
-      success: true,
-      message: "All Products are fetched successfully !",
-      data: result,
+      success: allProducts.length === 0 ? false : true,
+      message:
+        allProducts.length === 0
+          ? `'${search}' not found`
+          : `'Products fetched successfully!`,
+      data: allProducts,
     });
-  } catch (err: any) {
-    res.status(500).json({
+  } catch (error: any) {
+    res.status(400).json({
       success: false,
-      message: "Could not fetch products!",
-      error: err,
+      message: `Could not fetch the products`,
+      error: error.message,
     });
   }
 };
@@ -105,43 +116,10 @@ const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
-//Controller for searching product
-const searchProduct = async (req: Request, res: Response) => {
-  const searchTerm = req.query.searchTerm as string;
-  try {
-    if (!searchTerm) {
-      const result = await ProductServices.getAllProducts();
-
-      res.status(200).json({
-        success: true,
-        message: `Products matching search term '${searchTerm}' fetched successfully!`,
-        data: result,
-      });
-    } else {
-      const result = await ProductServices.searchProduct(searchTerm);
-      res.status(200).json({
-        success: result.length === 0 ? false : true,
-        message:
-          result.length === 0
-            ? `'${searchTerm}' not found`
-            : `'Products matching search term '${searchTerm}' fetched successfully!`,
-        data: result,
-      });
-    }
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: "Could not fetch the product!",
-      error: err,
-    });
-  }
-};
-
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getProductByID,
   deleteProduct,
   updateProduct,
-  searchProduct,
 };
