@@ -32,11 +32,11 @@ const getAllProducts = async (req: Request, res: Response) => {
 
     const searchRegEx = new RegExp(".*" + search + ".*", "i");
 
-    const filter = {
+    const findProduct = {
       $or: [{ name: { $regex: searchRegEx } }],
     };
 
-    const allProducts = await ProductServices.getAllProducts(filter);
+    const allProducts = await ProductServices.getAllProducts(findProduct);
 
     res.status(200).json({
       success: allProducts.length === 0 ? false : true,
@@ -62,8 +62,11 @@ const getProductByID = async (req: Request, res: Response) => {
     const result = await ProductServices.getProductByID(productId);
 
     res.status(200).json({
-      success: true,
-      message: "Product fetched successfully !",
+      success: result === null ? false : true,
+      message:
+        result === null
+          ? `Product not found`
+          : `'Products fetched successfully!`,
       data: result,
     });
   } catch (err: any) {
@@ -82,8 +85,11 @@ const deleteProduct = async (req: Request, res: Response) => {
     const result = await ProductServices.deleteProduct(productId);
 
     res.status(200).json({
-      success: true,
-      message: "Product deleted successfully !",
+      success: result.deletedCount === 0 ? false : true,
+      message:
+        result.deletedCount === 0
+          ? `Product not found`
+          : `'Product deleted successfully!`,
       data: result,
     });
   } catch (err: any) {
