@@ -3,8 +3,11 @@
 This project used Express with TypeScript as the programming language. Data management(product and order data) was done integrating MongoDB with Mongoose. For the validation and data integrity Zod validation was used.
 
 Steps to run the application locally,
+
 Create a folder named "e-commerce-backend" to required directory in your desktop.
+
 **1. Clone the Repository:**
+
 Run these commands in cmd:
 
 ```
