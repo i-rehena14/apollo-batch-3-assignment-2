@@ -4,6 +4,7 @@ import { OrderServices } from "./order.service";
 import { OrderZodSchema } from "./order.validation";
 import { Product } from "../products/product.model";
 
+//controller for making order
 const makeOrder = async (req: Request, res: Response) => {
   try {
     //data validation using zod
@@ -16,9 +17,16 @@ const makeOrder = async (req: Request, res: Response) => {
 
     if (orderedProduct !== null) {
       //check whether the ordered quantity is insufficient
+      // if (orderedProduct.inventory.quantity < zodParsedOrderedData.quantity) {
+      //   throw new Error("Insufficient quantity in stock");
+      // }
       if (orderedProduct.inventory.quantity < zodParsedOrderedData.quantity) {
-        throw new Error("Insufficient quantity in stock");
+        return res.status(400).json({
+          success: false,
+          message: "Insufficient quantity in stock!",
+        });
       }
+
       const result = await OrderServices.makeOrder(zodParsedOrderedData);
 
       if (result) {
@@ -59,6 +67,7 @@ const makeOrder = async (req: Request, res: Response) => {
   }
 };
 
+//controller for getting all the orders
 const getAllOrders = async (req: Request, res: Response) => {
   try {
     const result = await OrderServices.getAllOrders();
@@ -77,7 +86,40 @@ const getAllOrders = async (req: Request, res: Response) => {
   }
 };
 
+//controller for getting order by email
+const getOrderByEmail = async (req: Request, res: Response) => {
+  try {
+    const orderByEmail = req.query.email;
+    if (!orderByEmail) {
+      const result = await OrderServices.getAllOrders();
+      res.status(200).json({
+        success: true,
+        message: "Order fetched successfully!",
+        data: result,
+      });
+    } else {
+      const result = await OrderServices.getOrderByEmail(orderByEmail);
+
+      res.status(200).json({
+        success: result.length === 0 ? false : true,
+        message:
+          result.length === 0
+            ? "Order not found"
+            : "Orders fetched successfully for the email!",
+        data: result,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Orders could not fetched for the email!",
+      error: error,
+    });
+  }
+};
+
 export const OrderControllers = {
   makeOrder,
   getAllOrders,
+  getOrderByEmail,
 };

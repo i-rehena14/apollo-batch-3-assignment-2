@@ -12,7 +12,13 @@ const getAllOrders = async () => {
   return result;
 };
 
+const getOrderByEmail = async (email: unknown) => {
+  const result = await Order.find({ email });
+  return result;
+};
+
 export const OrderServices = {
   makeOrder,
   getAllOrders,
+  getOrderByEmail,
 };
