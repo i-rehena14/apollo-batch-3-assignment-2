@@ -4,7 +4,9 @@
   "description": "",
   "main": "./dist/server.js",
   "scripts": {
-    "start-prod": "node ./dist/server.js",
+    "start":"node ./dist/server.js",
+    "start-prod": "nodemon ./dist/server.js",
+    "build":"tsc",
     "start-dev": "ts-node-dev.cmd --respawn --transpile-only ./src/server.ts",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",

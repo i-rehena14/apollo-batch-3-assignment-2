@@ -16,13 +16,16 @@ cd e-commerce-backend
 code .
 ```
 
-**2. create a file named '.env' in the root of the project and paste these environment variables:**
+**2. Create a file named '.env' in the root of the project and paste these variables:**
+
+You can put your own DB_URL value.
 
 ```
-
+PORT=5000
+DB_URL=mongodb+srv://apollo-shop-admin:txK8FCxziCVDF5w7@cluster0.rwe3cde.mongodb.net/apollo-shop?retryWrites=true&w=majority&appName=Cluster0
 ```
 
-**3. Then go to terminal and run these commands:**
+**3. Then open terminal to run these commands:**
 
 ```
 npm install
